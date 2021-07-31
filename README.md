@@ -1,16 +1,46 @@
-### Hi there 👋
+$("#add_user").submit(function(event) {
+    alert("Data sukses dimasukkan!");
+})
 
-<!--
-**shafiraLuthfiyah13/shafiraluthfiyah13** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+$("#update_user").submit(function(event) {
+    event.preventDefault();
 
-Here are some ideas to get you started:
+    var unindexed_array = $(this).serializeArray();
+    var data = {}
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+    $.map(unindexed_array, function(n, i) {
+        data[n['name']] = n['value']
+    })
+
+
+    var request = {
+        "url": `http://localhost:3000/api/users/${data.id}`,
+        "method": "PUT",
+        "data": data
+    }
+
+    $.ajax(request).done(function(response) {
+        alert("Data berhasil diperbarui!");
+    })
+
+})
+
+if (window.location.pathname == "/admin") {
+    $ondelete = $(".table tbody td a.delete");
+    $ondelete.click(function() {
+        var id = $(this).attr("data-id")
+
+        var request = {
+            "url": `http://localhost:3000/api/users/${id}`,
+            "method": "DELETE"
+        }
+
+        if (confirm("Kamu yakin ingin menghapus data ini?")) {
+            $.ajax(request).done(function(response) {
+                alert("Data Berhasil Dihapus!");
+                location.reload();
+            })
+        }
+
+    })
+}
